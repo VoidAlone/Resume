@@ -13,13 +13,21 @@ public record ReadContactDto{
 	[EmailAddress]
 	public string? Email {get;set;}
 }
+public record CreateContactDto{
+	public string? Address{get;set;}
 
-// public record UpsertContact{
-// 	public string? Address{get;set;}
-//
-// 	[Phone]
-// 	public string? Phone{get;set;}	
-//
-// 	[EmailAddress]
-// 	public string? Email {get;set;}
-// }
+	[Phone]
+	public string? Phone{get;set;}	
+
+	[EmailAddress]
+	public string? Email {get;set;}
+}
+public record UpdateContactDto{
+	public string? Address{get;set;}
+
+	[Phone]
+	public string? Phone{get;set;}	
+
+	[EmailAddress]
+	public string? Email {get;set;}
+}
