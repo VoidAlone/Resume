@@ -3,7 +3,7 @@ namespace Resume.Models.Resume;
 public class Experience{
 	public int Id{get;set;}
 	public int UserId {get;set;}
-	public Identity.User User {get;set;} = null!;
+	public Identity.Profile Profile{get;set;} = null!;
 
 	public string? Organization{get;set;}
 	public string? Description{get;set;}
