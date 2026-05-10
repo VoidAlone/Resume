@@ -5,7 +5,7 @@ using Resume.Data;
 namespace Resume.Models.Identity;
 
 public class Account : IdentityUser {
-	public Profile? UserProfile {get;set;}
+	public ICollection<Profile>? Profiles {get;set;}
 }
 
 public static class SeedAccounts{

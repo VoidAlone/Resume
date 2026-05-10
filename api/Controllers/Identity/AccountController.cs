@@ -32,17 +32,17 @@ public class AccountController(AppDbContext context) : ControllerBase{
 	[HttpPost]
 	public async Task<IActionResult> Create(CreateAccountDto AccountRequest)
 	{
-		var account = new Account
+		var model = new Account
 		{
 			UserName = AccountRequest.UserName,
 		};
 
-		_context.Accounts.Add(account);
+		_context.Accounts.Add(model);
 		await _context.SaveChangesAsync();
 
 		var response = new ReadAccountDto{
-			Id = account.Id,
-			UserName = account.UserName
+			Id = model.Id,
+			UserName = model.UserName
 		};
 		return CreatedAtAction(nameof(Read), new { id = response.Id }, AccountRequest);
 	}
@@ -50,13 +50,13 @@ public class AccountController(AppDbContext context) : ControllerBase{
 	[HttpPut("{id:int}")]
 	public async Task<IActionResult> Update(int id, UpdateAccountDto AccountRequest)
 	{
-		var account = await _context.Accounts.FindAsync(id);
-		if (account == null)
+		var db_item = await _context.Accounts.FindAsync(id);
+		if (db_item == null)
 		{
 			return NotFound();
 		}
 
-		account.UserName= AccountRequest.UserName;
+		db_item.UserName = AccountRequest.UserName;
 
 		try
 		{
@@ -73,14 +73,14 @@ public class AccountController(AppDbContext context) : ControllerBase{
 	[HttpDelete("{id:int}")]
 	public async Task<IActionResult> Delete(int id)
 	{
-		var account = await _context.Accounts.FindAsync(id);
+		var db_item = await _context.Accounts.FindAsync(id);
 
-		if(account == null)
+		if(db_item == null)
 		{
 			return NotFound();
 		}
 
-		_context.Accounts.Remove(account);
+		_context.Accounts.Remove(db_item);
 		await _context.SaveChangesAsync();
 		return NoContent();
 	}
