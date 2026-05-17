@@ -29,12 +29,12 @@ public class ProfileController(AppDbContext context) : ControllerBase
 	}
 
 	[HttpPost]
-	public async Task<IActionResult> Create(CreateProfileDto ProfileRequest)
+	public async Task<IActionResult> Create(CreateProfileDto request)
 	{
 		//create new model object from dto
 		var model = new Models.Identity.Profile
 		{
-			Name = ProfileRequest.Name,
+			Name = request.Name,
 		};
 
 		//add to database
@@ -42,23 +42,23 @@ public class ProfileController(AppDbContext context) : ControllerBase
 		_context.Profiles.Add(model);
 		await _context.SaveChangesAsync();
 		//create readdto object and return it with metadata 
-		var response = new ReadProfileDto
+		var response = new CreateProfileDto
 		{
-			Name = ProfileRequest.Name,
+			Name = request.Name,
 		};
 		return CreatedAtAction(nameof(Read), new { id = model.Id }, response);
 	}
 
 	[HttpPut("{id:int}")]
-	public async Task<IActionResult> Update(int id, UpdateProfileDto ProfileRequest)
+	public async Task<IActionResult> Update(int id, UpdateProfileDto request)
 	{
-		var profile = await _context.Profiles.FindAsync(id);
+		var model = await _context.Profiles.FindAsync(id);
 
-		if(profile == null){
+		if(model == null){
 			return NotFound();
 		}
 
-		profile.Name = ProfileRequest.Name;
+		model.Name = request.Name;
 
 		try
 		{
