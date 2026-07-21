@@ -12,8 +12,8 @@ public class SocialController(AppDbContext context) : ControllerBase
 
 	private readonly AppDbContext _context = context;
 
-	[HttpGet]
-	public async Task<ActionResult<ReadSocialDto>> Read(string id)
+	[HttpGet("{id:int}")]
+	public async Task<ActionResult<ReadSocialDto>> Read(int id)
 	{
 		var social = await _context.Socials.FindAsync(id);
 
@@ -43,7 +43,7 @@ public class SocialController(AppDbContext context) : ControllerBase
 		_context.Socials.Add(model);
 
 		await _context.SaveChangesAsync();
-		var response = new CreateSocialDto{
+		var response = new ReadSocialDto{
 			Name = request.Name,
 			Display = request.Display,
 			Url = request.Url,

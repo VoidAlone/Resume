@@ -4,7 +4,7 @@ namespace Resume.Models.Identity;
 
 public class Contact{
 	public int Id {get;set;}
-	public int UserId {get;set;}
+	public int ProfileId {get;set;}
 	// public Identity.Profile Profile {get;set;} = null!;
 
 	public string? FullName {get;set;}

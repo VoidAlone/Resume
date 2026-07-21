@@ -6,6 +6,7 @@ namespace Resume.Models.Identity;
 
 public class Profile{
 	public int Id {get;set;}
+	public int AccountId {get;set;}
 	public string Name {get;set;} = null!;
 	public ICollection<Contact>? Contacts {get;set;}
 	public List<Social>? Socials {get;set;}	

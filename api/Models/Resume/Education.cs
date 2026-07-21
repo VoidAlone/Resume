@@ -2,7 +2,7 @@ namespace Resume.Models.Resume;
 
 public class Education{
 	public int Id {get;set;}
-	public int UserId {get;set;}
+	public int ProfileId {get;set;}
 	// public Identity.Profile Profile{get;set;} = null!;
 
 	public string? Organization {get;set;}
