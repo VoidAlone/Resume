@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Resume.Data;
 using Resume.Models.Identity;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 

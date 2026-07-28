@@ -1,11 +1,14 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Resume.Models.Identity;
 
-public class Contact{
-	public int Id {get;set;}
-	public int UserId {get;set;}
-	// public Identity.Profile Profile {get;set;} = null!;
+public class Contact : IUserOwnedEntity {
+
+	public int ProfileId {get; private set;}
+
+	[JsonIgnore]
+	public Profile Profile {get;set;} = null!;
 
 	public string? FullName {get;set;}
 
@@ -16,4 +19,9 @@ public class Contact{
 
 	[EmailAddress]
 	public string? Email {get;set;}
+
+    string IUserOwnedEntity.Id => throw new NotImplementedException();
+
+    string IUserOwnedEntity.UserId => throw new NotImplementedException();
+
 }

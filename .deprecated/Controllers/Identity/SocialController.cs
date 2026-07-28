@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Resume.Data;
 using Resume.DTOs.Identity;
 using Resume.Models.Identity;
+using Resume.Mappings.Identity;
 
 namespace Resume.Controllers.Identity;
 
@@ -12,8 +13,8 @@ public class SocialController(AppDbContext context) : ControllerBase
 
 	private readonly AppDbContext _context = context;
 
-	[HttpGet]
-	public async Task<ActionResult<ReadSocialDto>> Read(string id)
+	[HttpGet("{id:int}")]
+	public async Task<ActionResult<ReadSocialDto>> Read(int id)
 	{
 		var social = await _context.Socials.FindAsync(id);
 
@@ -22,51 +23,38 @@ public class SocialController(AppDbContext context) : ControllerBase
 			return NotFound();
 		}
 
-		return Ok(new ReadSocialDto
-		{
-			Id = social.Id,
-			Name = social.Name,
-			Display = social.Display,
-			Url = social.Url
-		});
+		return Ok(social.ToReadDto());
 	}
 
 	[HttpPost]
 	public async Task<IActionResult> Create(CreateSocialDto request)
 	{
-		var model = new Social{
-			Name = request.Name,
-			Display = request.Display,
-			Url = request.Url,
-		};
+		var model = request.ToModel();
 
 		_context.Socials.Add(model);
 
 		await _context.SaveChangesAsync();
-		var response = new CreateSocialDto{
-			Name = request.Name,
-			Display = request.Display,
-			Url = request.Url,
-		};
-		return CreatedAtAction(nameof(Read), new {id = model.Id}, response);
+		var response = model.ToReadDto();
+		return CreatedAtAction(nameof(Read), new { id = model.Id }, response);
 	}
 
 	[HttpPut("{id:int}")]
 	public async Task<IActionResult> Update(int id, UpdateSocialDto request)
 	{
 		var db_item = await _context.Socials.FindAsync(id);
-		if(db_item == null){
+		if (db_item == null)
+		{
 			return NotFound();
 		}
 
-		db_item.Name = request.Name;
-		db_item.Display = request.Display;
-		db_item.Url = request.Url;
+		request.ApplyUpdate(db_item);
 
-		try{
+		try
+		{
 			await _context.SaveChangesAsync();
 		}
-		catch{
+		catch
+		{
 			throw;
 		}
 		return NoContent();
@@ -76,7 +64,8 @@ public class SocialController(AppDbContext context) : ControllerBase
 	public async Task<IActionResult> Delete(int id)
 	{
 		var db_item = await _context.Socials.FindAsync(id);
-		if(db_item == null){
+		if (db_item == null)
+		{
 			return NotFound();
 		}
 
