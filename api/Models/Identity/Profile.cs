@@ -3,7 +3,9 @@ using Resume.Models.Resume;
 
 namespace Resume.Models.Identity;
 
-public class Profile : IUserOwnedEntity{
+public class Profile{
+	public int Id {get;set;}
+	public int AccountId {get;set;}
 	public string Name {get;set;} = null!;
 
 	[JsonIgnore]

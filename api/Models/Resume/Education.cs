@@ -2,7 +2,10 @@ using System.Text.Json.Serialization;
 
 namespace Resume.Models.Resume;
 
-public class Education: IUserOwnedEntity{
+public class Education{
+	public int Id {get;set;}
+	public int ProfileId {get;set;}
+	// public Identity.Profile Profile{get;set;} = null!;
 
 	public string? Organization {get;set;}
 	public float? Gpa{get;set;}
