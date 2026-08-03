@@ -4,26 +4,32 @@ using Resume.Data;
 
 namespace Resume.Models.Identity;
 
-public class Account : IdentityUser {
-	public ICollection<Profile>? Profiles {get;set;}
+public class Account : IdentityUser
+{
+	public ICollection<Profile>? Profiles { get; set; }
 }
 
-public static class SeedAccounts{
-	public static void Initialize(IServiceProvider serviceProvider){
-		using (var context = new AppDbContext(
-					serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>()
-					)){
-			if(context == null || context.Accounts == null){
+public static class SeedAccounts
+{
+	public static void Initialize(IServiceProvider serviceProvider)
+	{
+		using (var context = new AppDbContext(serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>()))
+		{
+			if (context == null || context.Accounts == null)
+			{
 				throw new ArgumentNullException("Null Resume Context");
 			}
-			if(context.Accounts.Any()){
+			if (context.Accounts.Any())
+			{
 				return;
 			}
 			context.Accounts.AddRange(
-					new Account{
+					new Account
+					{
 						UserName = "WetNapkin123",
 					},
-					new Account{
+					new Account
+					{
 						UserName = "ToeJam82",
 					}
 					);

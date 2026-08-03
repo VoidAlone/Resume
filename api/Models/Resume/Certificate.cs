@@ -1,10 +1,6 @@
 namespace Resume.Models.Resume;
 
-public class Certificate{
-	public int Id {get;set;}
-	public int ProfileId {get;set;}
-	// public Identity.Profile Profile {get;set;} = null!;
-
+public class Certificate : ProfileOwnedEntity {
 	public string? Name {get;set;}
 	public string? Organization {get;set;}
 	public DateOnly Date {get;set;}

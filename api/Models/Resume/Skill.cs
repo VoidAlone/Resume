@@ -1,10 +1,6 @@
 namespace Resume.Models.Resume;
 
-public class Skill{
-	public int Id {get;set;}
-	public int ProfileId {get;set;}
-	// public Identity.Profile Profile {get;set;} = null!;
-
+public class Skill : ProfileOwnedEntity{
 	public string? Name {get;set;}
 	public string? Description {get;set;}
 	public string? Proficiency {get;set;}
