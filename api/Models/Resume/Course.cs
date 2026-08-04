@@ -2,19 +2,9 @@ using System.Text.Json.Serialization;
 
 namespace Resume.Models.Resume;
 
-public class Course{
-	public int Id {get;set;}
-	public int ProfileId {get;set;}
-	// public Identity.Profile Profile{get;set;} = null!;
-
-	public int EducationId {get; private set;}
-	[JsonIgnore]
-	public Education Education {get; private set;} = null!;
-
-	public string? Name {get;set;}
-	public string? Description {get;set;}
-
-    string IUserOwnedEntity.Id => throw new NotImplementedException();
-
-    string IUserOwnedEntity.UserId => throw new NotImplementedException();
+public class Course : ProfileOwnedEntity
+{
+	public int EducationId { get; set; }
+	public string? Name { get; set; }
+	public string? Description { get; set; }
 }
