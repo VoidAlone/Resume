@@ -1,9 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using Resume.Models.Identity;
 
-namespace Resume.Models.Resume;
+namespace Resume.Models.ResumeModels;
 
-public class Social : AccountOwnedEntity
+public class Social : UserOwnedEntity
 {
 	[Url]
 	public string? Url {get;set;}

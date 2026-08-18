@@ -1,9 +1,6 @@
-using System.Text.Json.Serialization;
-using Resume.Models.Identity;
+namespace Resume.Models.ResumeModels;
 
-namespace Resume.Models.Resume;
-
-public class Course : AccountOwnedEntity
+public class Course : UserOwnedEntity
 {
 	public int EducationId { get; set; }
 	public string? Name { get; set; }

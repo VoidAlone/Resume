@@ -1,9 +1,6 @@
-using System.Text.Json.Serialization;
-using Resume.Models.Identity;
+namespace Resume.Models.ResumeModels;
 
-namespace Resume.Models.Resume;
-
-public class Education : AccountOwnedEntity
+public class Education : UserOwnedEntity
 {
 	public string? Organization {get;set;}
 	public float? Gpa{get;set;}

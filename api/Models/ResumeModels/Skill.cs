@@ -1,9 +1,6 @@
-using System.Text.Json.Serialization;
-using Resume.Models.Identity;
+namespace Resume.Models.ResumeModels;
 
-namespace Resume.Models.Resume;
-
-public class Skill : AccountOwnedEntity
+public class Skill : UserOwnedEntity
 {
 	public string? Name { get; set; }
 	public string? Description { get; set; }

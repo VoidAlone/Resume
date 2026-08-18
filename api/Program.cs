@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Resume.Data;
-using Resume.Models.Identity;
+using Resume.Models.ResumeModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +12,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // builder.Services.AddControllers();
 
-builder.Services.AddIdentityApiEndpoints<Account>().AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
@@ -21,7 +21,7 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope()){
 	var services = scope.ServiceProvider;
-	SeedAccounts.Initialize(services);
+	SeedUsers.Initialize(services);
 }
 
 // Configure the HTTP request pipeline.
@@ -35,7 +35,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapIdentityApi<Account>();
+app.MapIdentityApi<User>();
 
 app.Run();
 

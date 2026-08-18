@@ -1,4 +1,4 @@
-namespace Resume.Models.Resume;
+namespace Resume.Models.ResumeModels;
 
 public enum SkillCategory{
 	Language,

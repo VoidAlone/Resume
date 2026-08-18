@@ -1,11 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-using Resume.Models;
-using Resume.Models.Identity;
 
-namespace Resume.Models.Resume;
+namespace Resume.Models.ResumeModels;
 
-public class Contact : AccountOwnedEntity
+public class Contact : UserOwnedEntity
 {
 	[Phone]
 	public string? Phone { get; set; }
