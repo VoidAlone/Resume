@@ -1,28 +1,28 @@
 using Microsoft.EntityFrameworkCore;
 using Resume.Data;
+using Resume.Endpoints;
 using Resume.Models.ResumeModels;
+using Resume.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(options =>
-		options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+		options.UseSqlite(
+			builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// builder.Services.AddControllers();
+builder.Services
+	.AddIdentityApiEndpoints<User>()
+	.AddEntityFrameworkStores<AppDbContext>();
 
-builder.Services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddAuthorization();
 
+builder.Services.AddScoped(
+		typeof(ICrudService<>),
+		typeof(UserOwnedCrudService<>));
+
+builder.Services.AddOpenApi();
+
 var app = builder.Build();
-
-// app.MapControllers();
-
-using (var scope = app.Services.CreateScope()){
-	var services = scope.ServiceProvider;
-	SeedUsers.Initialize(services);
-}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -30,12 +30,21 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+// Middleware
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapIdentityApi<User>();
+// Endpoints
+app.MapGroup("/api/auth")
+	.MapIdentityApi<User>();
+app.MapUserCrudRoutes();
+
+// Seed
+using (var scope = app.Services.CreateScope()){
+	var services = scope.ServiceProvider;
+	SeedUsers.Initialize(services);
+}
 
 app.Run();
 
