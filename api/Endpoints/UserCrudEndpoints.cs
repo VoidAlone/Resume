@@ -1,13 +1,12 @@
 using System.Security.Claims;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Resume.Models.ResumeModels;
 using Resume.Services;
 
 namespace Resume.Endpoints;
 
 //The UserCrudEndpoints class is responsible for creating a generic
-//set of crud operations for the models. This is going to follow the simple 
-//api style 
+//set of crud operations for the models. This is going to follow the minimal
+//api style
 public static class UserCrudEndpoints
 {
 	public static IEndpointRouteBuilder MapUserCrudRoutes(
@@ -48,13 +47,17 @@ public static class UserCrudEndpoints
 		where T : UserOwnedEntity
 	{
 		group.MapGet("/", GetAllAsync<T>);
-		group.MapGet("/{id:int}", GetByIdAsync<T>);
+		group.MapGet("/{id:int}", GetByIdAsync<T>)
+			.WithName(GetByIdRouteName<T>());
 		group.MapPost("/", CreateAsync<T>);
 		group.MapPut("/{id:int}", UpdateAsync<T>);
 		group.MapDelete("/{id:int}", DeleteAsync<T>);
 
 		return group.RequireAuthorization();
 	}
+
+	// Each entity is registered once, so its type gives the GET route a unique name.
+	private static string GetByIdRouteName<T>() => $"{typeof(T).Name}.GetById";
 
 	public static async Task<IResult> GetAllAsync<T>(
 			ClaimsPrincipal user,
@@ -111,9 +114,12 @@ public static class UserCrudEndpoints
 		if (userId is null)
 			return Results.Unauthorized();
 
-		var created = service.CreateAsync(entity,userId,cancellationToken);
+		var created = await service.CreateAsync(entity, userId, cancellationToken);
 
-		return Results.Created($"/{created.Id}", created);
+		return Results.CreatedAtRoute(
+			routeName: GetByIdRouteName<T>(),
+			routeValues: new { id = created.Id },
+			value: created);
 	}
 
 	public static async Task<IResult> UpdateAsync<T>(
@@ -129,7 +135,7 @@ public static class UserCrudEndpoints
 		if (userId is null)
 			return Results.Unauthorized();
 
-		var updated = service.UpdateAsync(
+		var updated = await service.UpdateAsync(
 				id,
 				entity,
 				userId,
@@ -153,7 +159,7 @@ public static class UserCrudEndpoints
 
 		var deleted = await service.DeleteAsync(id, userId, cancellationToken);
 
-		return deleted 
+		return deleted
 			? Results.NoContent()
 			: Results.NotFound();
 	}

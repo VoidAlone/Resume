@@ -1,5 +1,16 @@
 namespace Resume.Models.ResumeModels;
 
+
+public enum SkillCategory
+{
+	Language,
+	Framework,
+	Library,
+	Database,
+	Tool,
+	Methodology,
+	Other,
+}
 public class Skill : UserOwnedEntity
 {
 	public string? Name { get; set; }

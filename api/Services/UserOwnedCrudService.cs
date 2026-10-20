@@ -28,6 +28,8 @@ namespace Resume.Services
 
 		public async Task<T> CreateAsync(T entity, string userId, CancellationToken cancellationToken = default)
 		{
+			// Identity fields belong to the server, even when supplied in the request.
+			entity.Id = 0;
 			entity.UserId = userId;
 
 			_db.Set<T>().Add(entity);
@@ -46,12 +48,15 @@ namespace Resume.Services
 			if (existing is null)
 				return null;
 
+			// Normalize identity before copying values: EF cannot change a tracked primary key.
+			entity.Id = existing.Id;
+			entity.UserId = existing.UserId;
+
+			// PUT replaces scalar values; navigation collections are not updated here.
 			_db.Entry(existing)
 				.CurrentValues
 				.SetValues(entity);
 
-			existing.Id = id;
-			existing.UserId = userId;
 
 			await _db.SaveChangesAsync(cancellationToken);
 
